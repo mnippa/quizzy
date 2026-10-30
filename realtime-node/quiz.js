@@ -1,62 +1,52 @@
-// realtime-node/quiz.js KOMPLETT ersetzen:
 async function handleHostStartQuiz(ws, msg, sessions, utils) {
-    console.log(`🔍 DEBUG: ws.role='${ws.role}', expected='host'`);
-    
-    if (ws.role !== 'host') {
-        console.log(`❌ NICHT Host: role='${ws.role}'`);
-        return;
-    }
-    
+    if (ws.role !== 'host') return;
+
     const sessionPin = ws.sessionPin;
     const session = sessions[sessionPin];
-    
-    if (!session) {
-        console.log(`❌ Session ${sessionPin} nicht gefunden`);
-        return;
-    }
-    
-    console.log(`🎯 Quiz START in ${sessionPin} (${Object.keys(session.players).length} Spieler)`);
-    
+    if (!session) return;
+
     session.state = 'question';
     session.current_question_index = 0;
-    session.answerStartTime = Date.now();
-    
-    await utils.loadNextQuestion(sessionPin, session);
-    
-    console.log(`📋 Frage: ${session.question.text}`);
-    
+
+    const hasQuestion = await utils.loadNextQuestion(sessionPin, session);
+    if (!hasQuestion || !session.question) {
+        session.state = 'finished';
+        utils.broadcastToSession(sessionPin, {
+            type: 'quiz_finished',
+            data: { ranking: [] }
+        }, sessions);
+        return;
+    }
+
     const quizStartMsg = {
         type: 'quiz_started',
-        data: { 
-            question: session.question, 
+        data: {
+            question: session.question,
             timeLeft: 15,
             state: 'question'
         }
     };
-    
+
     utils.broadcastToSession(sessionPin, quizStartMsg, sessions);
-    console.log(`📤 quiz_started an ${Object.keys(session.players).length} Spieler gesendet`);
 }
 
 async function handlePlayerAnswerSingle(ws, msg, sessions, utils) {
     const { sessionPin, answerIndex } = msg;
     const session = sessions[sessionPin];
+    if (!session || !session.question) return;
+
     const player = session.players[ws.clientId];
-    
-    if (!player || player.answered || session.state !== 'question') {
-        return;
-    }
-    
-    const answerTime = Date.now() - session.answerStartTime;
+    if (!player || player.answered || session.state !== 'question') return;
+
+    const answerTime = Date.now() - (session.answerStartTime || Date.now());
     const points = Math.max(40, 100 - (answerTime / 1000) * 4);
-    
+
     if (answerIndex === session.question.correct_option_index) {
         player.points += Math.round(points);
-        console.log(`✅ ${ws.nickname}: ${Math.round(points)} Punkte!`);
     }
-    
+
     player.answered = true;
-    
+
     utils.broadcastToSession(sessionPin, {
         type: 'player_answered',
         data: { playerId: ws.clientId, answered: true }
@@ -66,34 +56,31 @@ async function handlePlayerAnswerSingle(ws, msg, sessions, utils) {
 async function handleHostEndAnswerPhase(ws, msg, sessions, utils, ranking) {
     const sessionPin = ws.sessionPin;
     const session = sessions[sessionPin];
-    
-    if (ws.role !== 'host' || session.state !== 'question') return;
-    
-    console.log(`📊 Ergebnis-Phase Ende`);
-    
+
+    if (!session || ws.role !== 'host' || session.state !== 'question' || !session.question) return;
+
     const currentRanking = ranking.getRanking(session.players);
     utils.broadcastToSession(sessionPin, {
         type: 'show_solution',
-        data: { 
+        data: {
             correctAnswer: session.question.correct_option_index,
-            ranking: currentRanking 
+            ranking: currentRanking
         }
     }, sessions);
-    
+
     session.state = 'solution';
 }
 
 async function handleHostNextQuestion(ws, msg, sessions, utils, ranking) {
     const sessionPin = ws.sessionPin;
     const session = sessions[sessionPin];
-    
-    if (ws.role !== 'host' || session.state !== 'solution') return;
-    
-    console.log(`➡️ Nächste Frage`);
-    
-    session.current_question_index++;
-    
-    if (session.current_question_index >= 2) {
+
+    if (!session || ws.role !== 'host' || session.state !== 'solution') return;
+
+    session.current_question_index += 1;
+    const hasQuestion = await utils.loadNextQuestion(sessionPin, session);
+
+    if (!hasQuestion || !session.question) {
         session.state = 'finished';
         const finalRanking = ranking.getRanking(session.players);
         utils.broadcastToSession(sessionPin, {
@@ -102,12 +89,13 @@ async function handleHostNextQuestion(ws, msg, sessions, utils, ranking) {
         }, sessions);
         return;
     }
-    
-    await utils.loadNextQuestion(sessionPin, session);
-    Object.values(session.players).forEach(p => p.answered = false);
-    session.answerStartTime = Date.now();
+
+    Object.values(session.players).forEach((p) => {
+        p.answered = false;
+    });
+
     session.state = 'question';
-    
+
     utils.broadcastToSession(sessionPin, {
         type: 'next_question',
         data: { question: session.question, timeLeft: 15 }
@@ -117,12 +105,11 @@ async function handleHostNextQuestion(ws, msg, sessions, utils, ranking) {
 async function handleHostEndQuiz(ws, msg, sessions, utils, ranking) {
     const sessionPin = ws.sessionPin;
     const session = sessions[sessionPin];
-    
-    if (ws.role !== 'host') return;
-    
-    console.log(`🏁 Quiz ENDE`);
+
+    if (!session || ws.role !== 'host') return;
+
     session.state = 'finished';
-    
+
     const finalRanking = ranking.getRanking(session.players);
     utils.broadcastToSession(sessionPin, {
         type: 'quiz_finished',
@@ -130,7 +117,6 @@ async function handleHostEndQuiz(ws, msg, sessions, utils, ranking) {
     }, sessions);
 }
 
-// *** KRITISCH: ALLE FUNKTIONEN EXPORTIEREN ***
 module.exports = {
     handleHostStartQuiz,
     handlePlayerAnswerSingle,

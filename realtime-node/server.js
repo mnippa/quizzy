@@ -60,7 +60,7 @@ wss.on('connection', function(ws) {
             } else if (msg.type === 'host_end_answer_phase') {
                 await quiz.handleHostEndAnswerPhase(ws, msg, sessions, utils, ranking);
             } else if (msg.type === 'host_next_question') {
-                await quiz.handleHostNextQuestion(ws, msg, sessions, utils);
+                await quiz.handleHostNextQuestion(ws, msg, sessions, utils, ranking);
             } else if (msg.type === 'host_end_quiz') {
                 await quiz.handleHostEndQuiz(ws, msg, sessions, utils, ranking);
             } else {

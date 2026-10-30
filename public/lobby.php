@@ -1,3 +1,6 @@
+<?php
+$config = require __DIR__ . '/../config/config.php';
+?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -48,8 +51,8 @@
     </div>
 
     <script>
-        const WS_HOST = '<?php echo $_ENV['ws_host'] ?? "localhost"; ?>';
-        const WS_PORT = <?php echo $_ENV['ws_port'] ?? 8080; ?>;
+        const WS_HOST = '<?php echo htmlspecialchars($config['ws_host'], ENT_QUOTES, "UTF-8"); ?>';
+        const WS_PORT = <?php echo (int) $config['ws_port']; ?>;
         const SESSION_PIN = "<?php echo htmlspecialchars($_GET['pin'] ?? ''); ?>";
     </script>
     <script src="js/app.js"></script>
