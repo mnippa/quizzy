@@ -15,7 +15,7 @@ Diese Datei ist der Einstiegspunkt fuer einen neuen Chat. Sie trennt abgenommene
 - AP-11A wurde mit Vertragstests, Browserlauf mit Host/zwei Spielern/Display sowie Display-Reload und Node-Neustart abgenommen.
 - WSS-Client, DB-Pool und Debian-Vorlagen sind lokal geprueft.
 - Debian-Abnahme ist zurueckgestellt; die Featureentwicklung kann auf dem lokal geprueften Grossrundenstand weitergehen.
-- Der Git-Worktree ist umfangreich geaendert und nicht committed. Nichts ungeprueft zuruecksetzen.
+- Der Entwicklungsstand ist auf dem lokalen Branch `sync/local-october-2026` gesichert und mit `origin/main` zusammengefuehrt. `backup/local-before-sync-20261031` bewahrt den Stand vor der Zusammenfuehrung. Der lokale `main` bleibt unveraendert; es wurde nichts hochgeladen. Nichts ungeprueft zuruecksetzen.
 
 ## 2. Abgenommener Produktstand
 
@@ -146,6 +146,7 @@ Betroffene Dateien:
 ## 5. Exakter Validierungsstand
 
 - Aktuelle vollstaendige Node-Suite nach Ergebnisphase: 68/68 bestanden.
+- Nach lokalem Git-Abgleich erneut 68/68 bestanden; PHP-/JavaScript-Syntax sowie konfigurierter Admin-Login und Datenbankzugriff geprueft. `.env` und lokale VS-Code-Einstellungen bleiben ignoriert. Zugangsdaten sind in `.env` zu setzen, nicht in Beispielkonfigurationen oder Passwort-Fallbacks.
 - Endstand-Browserlauf mit 101 lokalen Teilnehmern und echtem Node-Neustart; JavaScript- und PHP-Syntaxchecks fuer die betroffenen Dateien bestanden.
 - Historischer AP-11A-Stand: 32/32 bestanden.
 - Fokussierte Live-, Freitextreview-, Hostautorisierungs- und Restarttests bestanden.
