@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Quizzy Demo</title>
+  <desc id="description">Bunte Quizkarten mit Fragen aus Allgemeinwissen, Technik und Logik.</desc>
+  <rect width="1200" height="675" fill="#eaf4ef"/>
+  <circle cx="1080" cy="80" r="150" fill="#ffca58"/>
+  <circle cx="90" cy="610" r="190" fill="#82c9ae"/>
+  <rect x="150" y="105" width="900" height="465" rx="34" fill="#fff" stroke="#0f2a25" stroke-width="10"/>
+  <rect x="210" y="165" width="460" height="345" rx="24" fill="#0f2a25"/>
+  <text x="440" y="270" fill="#fff" font-family="Trebuchet MS, sans-serif" font-size="48" font-weight="700" text-anchor="middle">QUIZZY DEMO</text>
+  <text x="440" y="390" fill="#ffca58" font-family="Trebuchet MS, sans-serif" font-size="150" font-weight="700" text-anchor="middle">?</text>
+  <rect x="720" y="165" width="270" height="74" rx="16" fill="#0ea472"/>
+  <rect x="720" y="257" width="270" height="74" rx="16" fill="#1967d2"/>
+  <rect x="720" y="349" width="270" height="74" rx="16" fill="#cb5e10"/>
+  <rect x="720" y="441" width="270" height="69" rx="16" fill="#6947bf"/>
+  <text x="855" y="213" fill="#fff" font-family="Trebuchet MS, sans-serif" font-size="28" font-weight="700" text-anchor="middle">WISSEN</text>
+  <text x="855" y="305" fill="#fff" font-family="Trebuchet MS, sans-serif" font-size="28" font-weight="700" text-anchor="middle">TECHNIK</text>
+  <text x="855" y="397" fill="#fff" font-family="Trebuchet MS, sans-serif" font-size="28" font-weight="700" text-anchor="middle">LOGIK</text>
+  <text x="855" y="486" fill="#fff" font-family="Trebuchet MS, sans-serif" font-size="28" font-weight="700" text-anchor="middle">TEMPO</text>
+</svg>

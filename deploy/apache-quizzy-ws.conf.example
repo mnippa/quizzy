@@ -1,0 +1,5 @@
+# Include these directives inside the existing HTTPS virtual host.
+# Enable Apache modules: proxy, proxy_http, proxy_wstunnel.
+ProxyPreserveHost On
+ProxyPass        /ws  ws://127.0.0.1:8081/  timeout=60
+ProxyPassReverse /ws  ws://127.0.0.1:8081/

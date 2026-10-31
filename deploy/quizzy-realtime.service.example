@@ -1,0 +1,28 @@
+[Unit]
+Description=Quizzy realtime WebSocket server
+After=network.target mariadb.service
+Wants=mariadb.service
+
+[Service]
+Type=simple
+User=quizzy
+Group=quizzy
+WorkingDirectory=/opt/quizzy/realtime-node
+EnvironmentFile=/etc/quizzy/quizzy.env
+Environment=HOST=127.0.0.1
+Environment=PORT=8081
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,5 +1,8 @@
 ﻿# Quizzy
 
+Aktueller Entwicklungsstand: [Uebergabe und Status](docs/uebergabe-status-2026-10-30.md).
+Die folgende MVP-Beschreibung stammt vom 2026-02-06 und ist historisch.
+
 ## Projektstatus (Stand: 2026-02-06)
 
 Status: **MVP / Prototyp in aktiver Entwicklung**
@@ -30,6 +33,16 @@ Das Projekt besitzt einen funktionsfähigen Grundfluss für ein Live-Quiz (Lobby
 - Spieler können Antworten senden.
 - Punkteberechnung und Ranking-Grundfunktion vorhanden.
 
+## Unterstützte Fragetypen (aktuell)
+
+- `single_choice` (eine richtige Antwort)
+- `true_false` (Wahr/Falsch)
+- `multiple_choice` (mehrere richtige Antworten)
+- `short_text` (Freitext mit akzeptierten Antwortvarianten)
+
+Hinweis:
+Die Demo-Seeds legen repräsentative Fragen für alle vier Typen an.
+
 ## Bekannte Baustellen
 
 - **Encoding-Probleme** (Umlaute/Zeichen) in mehreren Dateien sichtbar.
@@ -48,7 +61,7 @@ Das Projekt besitzt einen funktionsfähigen Grundfluss für ein Live-Quiz (Lobby
 
 1. XAMPP/Apache + MySQL starten.
 2. Datenbank `quizgame` bereitstellen.
-3. PHP-Konfiguration prüfen: `config/config.php`.
+3. `.env.example` nach `.env` kopieren und lokale Datenbankzugangsdaten sowie `ADMIN_USER` und `ADMIN_PASS` setzen. `.env` wird nicht eingecheckt. PHP und Node lesen diese lokale Konfiguration; ohne gesetztes `ADMIN_PASS` ist kein Admin-Login moeglich.
 4. Node-Server starten:
 
 ```bash
